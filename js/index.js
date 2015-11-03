@@ -18,7 +18,7 @@
         this.init = function() {
             var me = this;
             this.generateBall();
-            //this.ball.move();
+            this.ball.move();
             return me;
         };
         this.generateBall = function() {
@@ -73,14 +73,38 @@
 
         this.move = function() {
 
-            var me = this;
+            var me = this,
+                ballWidth,
+                ballHeight,
+                bodyWidth,
+                bodyHeight;
+
             var move = function() {
                 me.checkPosition();
 
                 me.point.top += me.speed * Math.sin(me.angle * (Math.PI / 180));
                 me.point.left += me.speed * Math.cos(me.angle * (Math.PI / 180));
 
-                me.element.style.transform = 'translate(' + me.point.left + 'px,' + me.point.top + 'px)';
+                ballWidth = me.element.offsetWidth,
+                ballHeight = me.element.offsetHeight,
+
+                bodyWidth = me.body.offsetWidth;
+                bodyHeight = me.body.offsetHeight;
+
+                if (me.point.top + ballHeight > bodyHeight) {
+                    me.point.top = bodyHeight - ballHeight;
+                }
+                if (me.point.left +  ballWidth > bodyWidth) {
+                    me.point.left = bodyWidth - ballWidth;
+                }
+
+                if (me.point.left < 0) {
+                    me.point.left = 0;
+                }
+
+                //me.element.style.transform = 'translate(' + me.point.left + 'px,' + me.point.top + 'px)';
+                me.element.style.left = me.point.left + 'px';
+                me.element.style.top = me.point.top + 'px';
 
                 requestAnimationFrame(move);
             };
@@ -131,9 +155,9 @@
     document.addEventListener("DOMContentLoaded", function(event) {
         var balls = [];
             balls.push(new Game().init().ball);
-        for(var i = 0; i < 300; i++) {
+        for(var i = 0; i < 100; i++) {
             balls.push(new Game().init().ball);
         }
-        new Animator(balls).animate();
+        //new Animator(balls).animate();
     });
 })();
