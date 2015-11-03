@@ -145,10 +145,10 @@
                     ball.point.left = 0;
                 }
 
-                //ball.element.style.transform = 'translate(' + ball.point.left + 'px,' + ball.point.top + 'px)';
+                ball.element.style.transform = 'translate(' + ball.point.left + 'px,' + ball.point.top + 'px)';
 
-                ball.element.style.left = ball.point.left + 'px';
-                ball.element.style.top = ball.point.top + 'px';
+                //ball.element.style.left = ball.point.left + 'px';
+                //ball.element.style.top = ball.point.top + 'px';
 
             }
             requestAnimationFrame(me.animate);
