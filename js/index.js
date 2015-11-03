@@ -98,49 +98,52 @@
             bodyWidth,
             bodyHeight;
 
+        this.mover = function(ball) {
+            ball.element.style.transform = 'translate(' + ball.point.left + 'px,' + ball.point.top + 'px)';
+        }
+
         this.animate = function() {
             var ball,
                 i;
 
-            for (i = index; i < index + delta; i++) {
-                if (balls[i]) {
-                    ball = balls[i];
-                    ball.checkPosition();
-                    ball.point.top += ball.speed * Math.sin(ball.angle * (Math.PI / 180));
-                    ball.point.left += ball.speed * Math.cos(ball.angle * (Math.PI / 180));
+            for (i = index; i < balls.length; i++) {
+                ball = balls[i];
+                ball.checkPosition();
+                ball.point.top += ball.speed * Math.sin(ball.angle * (Math.PI / 180));
+                ball.point.left += ball.speed * Math.cos(ball.angle * (Math.PI / 180));
 
-                    // should be dynamic
-                    bodyWidth = ball.body.offsetWidth;
-                    bodyHeight = ball.body.offsetHeight;
+                // should be dynamic
+                bodyWidth = ball.body.offsetWidth;
+                bodyHeight = ball.body.offsetHeight;
 
 
-                    if (ball.point.top + ballHeight > bodyHeight) {
-                        ball.point.top = bodyHeight - ballHeight;
-                    }
-                    if (ball.point.left +  ballWidth > bodyWidth) {
-                        ball.point.left = bodyWidth - ballWidth;
-                    }
-
-                    if (ball.point.left < 0) {
-                        ball.point.left = 0;
-                    }
-
-                    ball.element.style.transform = 'translate(' + ball.point.left + 'px,' + ball.point.top + 'px)';
-                } else {
-                    index = -1 * delta;
+                if (ball.point.top + ballHeight > bodyHeight) {
+                    ball.point.top = bodyHeight - ballHeight;
+                }
+                if (ball.point.left +  ballWidth > bodyWidth) {
+                    ball.point.left = bodyWidth - ballWidth;
                 }
 
+                if (ball.point.left < 0) {
+                    ball.point.left = 0;
+                }
+
+                (function(ball, i) {
+                    fastdom.write(function() {
+                        me.mover(ball, i);
+                    });
+                })(ball, i);
+
             }
-            index += delta;
-            //if (index >
             requestAnimationFrame(me.animate);
 
         }
     }
     document.addEventListener("DOMContentLoaded", function(event) {
-        var balls = [];
+        var ballCount = 1000,
+            balls = [];
             balls.push(new Game().init().ball);
-        for(var i = 0; i < 300; i++) {
+        for(var i = 0; i < ballCount; i++) {
             balls.push(new Game().init().ball);
         }
         new Animator(balls).animate();
