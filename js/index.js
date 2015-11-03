@@ -140,7 +140,7 @@
         }
     }
     document.addEventListener("DOMContentLoaded", function(event) {
-        var ballCount = 1000,
+        var ballCount = 300,
             balls = [];
             balls.push(new Game().init().ball);
         for(var i = 0; i < ballCount; i++) {
