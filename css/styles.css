@@ -24,3 +24,8 @@ html, body {
     /*transition: transform 0.1s;*/
     transform: translate(0px, 0px);
 }
+
+.controls {
+    position: absolute;
+    z-index: 1;
+}

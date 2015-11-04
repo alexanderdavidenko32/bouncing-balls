@@ -36,7 +36,7 @@
         this.speed = 10;
         this.game = game;
 
-        this.body.appendChild(this.element);
+        //this.body.appendChild(this.element);
 
         //this.point = {
             //top: this.body.offsetHeight / 2 - this.element.offsetHeight / 2,
@@ -70,23 +70,6 @@
         this.updateVerticalBordersAngle = function() {
             this.angle += (90 - this.angle) * 2;
         };
-
-        this.move = function() {
-
-            var me = this;
-            var move = function() {
-                me.checkPosition();
-
-                me.point.top += me.speed * Math.sin(me.angle * (Math.PI / 180));
-                me.point.left += me.speed * Math.cos(me.angle * (Math.PI / 180));
-
-                me.element.style.transform = 'translate(' + me.point.left + 'px,' + me.point.top + 'px)';
-
-                requestAnimationFrame(move);
-            };
-
-            requestAnimationFrame(move);
-        };
     }
     function Animator(ballsArray) {
         var me = this,
@@ -95,6 +78,7 @@
             delta = Math.round(balls.length/4),
             ballWidth = balls[0].element.offsetWidth,
             ballHeight = balls[0].element.offsetHeight,
+            stop = false,
             bodyWidth,
             bodyHeight;
 
@@ -135,17 +119,57 @@
                 })(ball, i);
 
             }
-            requestAnimationFrame(me.animate);
+            if (!stop) {
+                requestAnimationFrame(me.animate);
+            }
 
+
+
+        }
+        this.stop = function() {
+            stop = true;
+        }
+    }
+
+    function Cleaner() {
+        this.removePane = function() {
+            var pane = document.querySelector('.pane');
+            pane.parentNode.removeChild(pane);
+        }
+        this.removeBalls = function() {
+            var ballsNodes = document.querySelectorAll('.ball');
+            for (var i = 0; i < ballsNodes.length; i++) {
+                ballsNodes[i].parentNode.removeChild(ballsNodes[i]);
+            }
         }
     }
     document.addEventListener("DOMContentLoaded", function(event) {
-        var ballCount = 300,
-            balls = [];
-            balls.push(new Game().init().ball);
-        for(var i = 0; i < ballCount; i++) {
-            balls.push(new Game().init().ball);
-        }
-        new Animator(balls).animate();
+        var cleaner = new Cleaner(),
+            animator;
+
+        document.querySelector('.controls form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            var ballCount = +document.querySelector('.controls input').value,
+                pane = document.createElement('div'),
+                balls = [];
+
+            cleaner.removePane();
+            pane.classList.add('pane');
+
+            if (animator) {
+                animator.stop();
+                animator = null;
+            }
+            // create balls, add them to pane
+            for(var i = 0; i < ballCount; i++) {
+                balls.push(new Game().init().ball);
+                pane.appendChild(balls[i].element);
+            }
+            document.querySelector('body').appendChild(pane);
+
+            animator = new Animator(balls);
+            animator.animate();
+        });
     });
 })();
