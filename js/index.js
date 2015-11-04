@@ -13,13 +13,8 @@
             right: 0
         };
         this.body = document.querySelector('body');
-        this.leftScore = document.querySelector('.score .left');
-        this.rightScore = document.querySelector('.score .right');
         this.init = function() {
-            var me = this;
             this.generateBall();
-            //this.ball.move();
-            return me;
         };
         this.generateBall = function() {
             this.ball = new Ball(this);
@@ -36,8 +31,6 @@
         this.speed = 10;
         this.game = game;
 
-        //this.body.appendChild(this.element);
-
         //this.point = {
             //top: this.body.offsetHeight / 2 - this.element.offsetHeight / 2,
             //left: this.body.offsetWidth / 2 - this.element.offsetWidth / 2
@@ -50,8 +43,8 @@
         this.checkPosition = function() {
             this.angle = this.angle % 360;
 
-            var elemTop = this.point.top;
-            var elemLeft = this.point.left;
+            var elemTop = this.point.top,
+                elemLeft = this.point.left;
 
             if (elemTop <= 0) {
                 this.updateHorizontalBordersAngle();
@@ -123,8 +116,6 @@
                 requestAnimationFrame(me.animate);
             }
 
-
-
         }
         this.stop = function() {
             stop = true;
@@ -145,7 +136,8 @@
     }
     document.addEventListener("DOMContentLoaded", function(event) {
         var cleaner = new Cleaner(),
-            animator;
+            animator,
+            game;
 
         document.querySelector('.controls form').addEventListener('submit', function(event) {
             event.preventDefault();
@@ -163,8 +155,10 @@
             }
             // create balls, add them to pane
             for(var i = 0; i < ballCount; i++) {
-                balls.push(new Game().init().ball);
-                pane.appendChild(balls[i].element);
+                game = new Game();
+                game.init();
+                balls.push(game.ball);
+                pane.appendChild(game.ball.element);
             }
             document.querySelector('body').appendChild(pane);
 
