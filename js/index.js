@@ -106,10 +106,10 @@
                 me.element.style.left = me.point.left + 'px';
                 me.element.style.top = me.point.top + 'px';
 
-                requestAnimationFrame(move);
+                setTimeout(move, 1000 / 60);
             };
 
-            requestAnimationFrame(move);
+            setTimeout(move, 1000 / 60);
         };
     }
     function Animator(ballsArray) {
