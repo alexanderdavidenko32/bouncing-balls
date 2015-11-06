@@ -8,4 +8,4 @@ small performance improvement test
 - will-change
 - fastdom
 
-use `git branch` to check all features in separate branches.
+use `git branch -a` to check all features in separate branches.
